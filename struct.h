@@ -19,7 +19,7 @@ typedef struct {
 
 typedef struct { // struct ktory bedzie przechowywal dane o krawedziach
     char *nazwa;
-    int node1; // z kąd 
+    int node1; // skąd 
     int node2; // do kąd
     double waga;
 
