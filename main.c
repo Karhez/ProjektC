@@ -3,6 +3,10 @@
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
+#include "struct.h"
+#include "danePob.h"
+#include "graf.h"
+#include "algorytmy.h"
 #define DOMYSLNE_ITERACJE 200
 #define SZEROKOSC_POLA 40.0
 #define WYSOKOSC_POLA 40.0
@@ -49,12 +53,16 @@ int main(int argc, char *argv[]){
 
     grafWieCal wierzcholki;
     grafKraCal krawedzie;
+
+    krawedzie.Krawedzie =NULL;
+    krawedzie.liczbaKrawedzi = 0;
     inicjuj_grafy(&wierzcholki, &krawedzie);
 
-    if(!wczytaj_z_tekstu(file_in, &wierzcholki, &krawedzie)){
+    if(!pobieranieDanych(file_in,&krawedzie)){
         fprintf(stderr, "Blad: Nie mozna wczytac pliku %s\n", file_in);
         return EXIT_FAILURE;
     }
+    buduj_wierzcholki_z_krawedzi(&wierzcholki, &krawedzie);
     // Uruchamianie algorytmu
     if(strcmp(algo, "fre")  == 0){
         uklad_fre(&wierzcholki, &krawedzie, DOMYSLNE_ITERACJE, SZEROKOSC_POLA, WYSOKOSC_POLA);
