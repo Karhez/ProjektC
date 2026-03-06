@@ -61,10 +61,4 @@ int pobieranieDanych(char * nazwaPliku, grafKraCal *krawedzieGrafu ){
 }    
 
 
-int freeKra(grafKraCal *structZKra){ // structZKra - struktóra z krawędziami
-    if(structZKra != NULL){
-        free(structZKra->Krawedzie);
-        free(structZKra);
-    }
-    return 1;
-}
+

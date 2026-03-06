@@ -9,6 +9,6 @@
 
 int pobieranieDanych(char * nazwaPliku, grafKraCal *krawedzieGrafu ); // funkcja pobierania danych 
 int PrintElements(grafKraCal *structZKra);
-int freeKra(grafKraCal *structZKra);
+
 
 #endif
