@@ -3,6 +3,10 @@
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
+
+#include "struct.h"
+
+
 #define DOMYSLNE_ITERACJE 200
 #define SZEROKOSC_POLA 40.0
 #define WYSOKOSC_POLA 40.0
@@ -47,8 +51,8 @@ int main(int argc, char *argv[]){
     }
     srand(time(NULL));
 
-    grafWieCal wierzcholki;
-    grafKraCal krawedzie;
+    graf_Nod_All wierzcholki;
+    graf_Edg_All krawedzie;
     inicjuj_grafy(&wierzcholki, &krawedzie);
 
     if(!wczytaj_z_tekstu(file_in, &wierzcholki, &krawedzie)){

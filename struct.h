@@ -14,22 +14,22 @@ typedef struct {
     node * nody; // lista z wierzchołkami
     int liczbaWierzcholkow; // liczba wierzchołków
 
-}grafWieCal;
+}graf_Nod_All;
 
 
 typedef struct { // struct ktory bedzie przechowywal dane o krawedziach
-    char *nazwa;
+    char nazwa[50];
     int node1; // skąd 
     int node2; // do kąd
     double waga;
 
-} Krawedz;
+} Edge;
 
 typedef struct{ // struct ktory bedzie przechowywal dane o krawedziach WSZYSTKICH
-    Krawedz *Krawedzie; // lista z krawedziami
+    Edge *Krawedzie; // lista z krawedziami
     int liczbaKrawedzi;
     
-}grafKraCal;
+}graf_Edg_All;
 
 
 
