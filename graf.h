@@ -4,20 +4,11 @@
 #include <stdbool.h>
 #include "struct.h"
 
-<<<<<<< HEAD
-void inicjuj_wierzcholki(graf_Nod_All *wierzcholki);
-void buduj_wierzcholki_z_krawedzi(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie);
-void zwolnij_grafy(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie);
+void inicjuj_wierzcholki(graf_Nod_All *wierzcholki); // przypisanie jakiś lowosych współrzędnych dla wierzchołków
+void buduj_wierzcholki_z_krawedzi(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie); // buwowanie wierzchołków z krawędiz poprzez np hash mapę lub inaczej
+void zwolnij_grafy(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie); // zwalnianie pamięci dla grafu
 
-bool zapisz_tekstowo(const graf_Nod_All *wierzcholki, const char *nazwa_pliku);
-bool zapisz_binarnie(const graf_Nod_All *wierzcholki, const char *nazwa_pliku);
-=======
-void inicjuj_wierzcholki(grafWieCal *wierzcholki);
-void buduj_wierzcholki_z_krawedzi(grafWieCal *wierzcholki, grafKraCal *krawedzie);
-void zwolnij_grafy(grafWieCal *wierzcholki, grafKraCal *krawedzie);
-
-bool zapisz_tekstowo(const grafWieCal *wierzcholki, const char *nazwa_pliku);
-bool zapisz_binarnie(const grafWieCal *wierzcholki, const char *nazwa_pliku);
->>>>>>> d625148cb64d0ed6a2840019adb92603e72f5e08
+bool zapisz_tekstowo(const graf_Nod_All *wierzcholki, const char *nazwa_pliku); // funkcja która zpaisuje tekstowo węzły do pliku
+bool zapisz_binarnie(const graf_Nod_All *wierzcholki, const char *nazwa_pliku); // funkcja która zpaisuje binarnie węzły do pliku
 
 #endif

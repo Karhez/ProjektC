@@ -3,17 +3,10 @@
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
-<<<<<<< HEAD
-
-#include "struct.h"
-
-
-=======
 #include "struct.h"
 #include "danePob.h"
 #include "graf.h"
 #include "algorytmy.h"
->>>>>>> d625148cb64d0ed6a2840019adb92603e72f5e08
 #define DOMYSLNE_ITERACJE 200
 #define SZEROKOSC_POLA 40.0
 #define WYSOKOSC_POLA 40.0
@@ -58,16 +51,8 @@ int main(int argc, char *argv[]){
     }
     srand(time(NULL));
 
-<<<<<<< HEAD
     graf_Nod_All wierzcholki;
     graf_Edg_All krawedzie;
-=======
-    grafWieCal wierzcholki;
-    grafKraCal krawedzie;
-
-    krawedzie.Krawedzie =NULL;
-    krawedzie.liczbaKrawedzi = 0;
->>>>>>> d625148cb64d0ed6a2840019adb92603e72f5e08
     inicjuj_grafy(&wierzcholki, &krawedzie);
 
     if(!pobieranieDanych(file_in,&krawedzie)){
