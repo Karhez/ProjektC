@@ -25,18 +25,26 @@ void buduj_wierzcholki_z_krawedzi(graf_Nod_All *wierzcholki, graf_Edg_All *krawe
         int nazwa_Node1 = krawedzie->Krawedzie->node1;
         int nazwa_Node2 = krawedzie->Krawedzie->node2;
         
+        wierzcholki->nody[i].listaPol = calloc(krawedzie->liczbaKrawedzi*2+1,sizeof(int));
+
         if(hash_Map_Edg[nazwa_Node1]==0 || hash_Map_Edg[nazwa_Node2]==0){
 
             if(hash_Map_Edg[nazwa_Node1] == 0 ){ // dodajemy node 1
                 wierzcholki->nody[nazwa_Node1].node1 = nazwa_Node1;
                 hash_Map_Edg[nazwa_Node1] = 1;
                 licza_Dodanych ++;
+
+                wierzcholki->nody[nazwa_Node1].listaPol[nazwa_Node2] = 1; // zapisujemy z czym ma on połączenie
+                wierzcholki->nody[nazwa_Node2].listaPol[nazwa_Node1] = 1;
             }
 
             if(hash_Map_Edg[nazwa_Node2] == 0){ // dodajemy node 2
                 wierzcholki->nody[nazwa_Node2].node1 = nazwa_Node2;
                 hash_Map_Edg[nazwa_Node2] = 1;
                 licza_Dodanych ++;
+
+                wierzcholki->nody[nazwa_Node1].listaPol[nazwa_Node2] = 1; // zapisujemy z czym ma on połączenie
+                wierzcholki->nody[nazwa_Node2].listaPol[nazwa_Node1] = 1;
             }
         }
     }
@@ -58,6 +66,10 @@ void inicjuj_wierzcholki(graf_Nod_All *wierzcholki){
 } 
 
 void zwolnij_grafy(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie){
+    for(int i = 0; i<wierzcholki->liczbaWierzcholkow;i++){
+        free(wierzcholki->nody[i].listaPol);
+    }
+    
     free(wierzcholki->nody);// tutaj będzie trzeba zmienić bo jest malloc na listę a nie element no chyba że tak możę być nie ma to większego znaczenia 
     free(krawedzie->Krawedzie); // 
     free(krawedzie);
