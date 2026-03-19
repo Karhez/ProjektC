@@ -51,11 +51,8 @@ int main(int argc, char *argv[]){
     }
     srand(time(NULL));
 
-    grafWieCal wierzcholki;
-    grafKraCal krawedzie;
-
-    krawedzie.Krawedzie =NULL;
-    krawedzie.liczbaKrawedzi = 0;
+    graf_Nod_All wierzcholki;
+    graf_Edg_All krawedzie;
     inicjuj_grafy(&wierzcholki, &krawedzie);
 
     if(!pobieranieDanych(file_in,&krawedzie)){
