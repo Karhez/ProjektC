@@ -37,4 +37,80 @@ int FuchterMann (graf_Edg_All *Edge, graf_Nod_All *Node){
 
 }
 
+void uklad_tut(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie, int iteracje){
+    if(krawedzie->liczbaKrawedzi == 0) return;
+    int max_id = 0; // okreslam maksymlane id aby wiedziec jaki jest zakres tablicy nodów
+    for(int i =0; i<krawedzie->liczbaKrawedzi; i++){
+        if(krawedzie->Krawedzie[i].node1 > max_id) max_id = krawedzie->Krawedzie[i].node1;
+        if(krawedzie->Krawedzie[i].node2 > max_id) max_id = krawedzie->Krawedzie[i].node2;
+    }
+    int rozmiar_tablicy = max_id + 1; // ideksxujemy od 0 wiec gdy max_id = 100 to jest 99 node
+    // tablice pomocnicze - wspolrzedne
+    double * nowe_x = calloc(rozmiar_tablicy, sizeof(double));
+    double * nowe_y = calloc(rozmiar_tablicy, sizeof(double));
+    int *stopien = calloc(rozmiar_tablicy, sizeof(int)); // informacja ile sasiadow ma dany wierzcholek
+
+    int rama[3] = {-1, -1, -1}; // puste miejsca
+    int liczba_el_rama = 0;
+    for(int i =0; i < krawedzie->liczbaKrawedzi && liczba_el_rama < 3; i++){
+        int u = krawedzie->Krawedzie[i].node1;
+        int v = krawedzie->Krawedzie[i].node2;
+        int u_znane = 0;
+        int v_znane = 0;
+        for(int j =0; j <liczba_el_rama; j++){
+            if(rama[j] == u) u_znane = 1;
+            if(rama[j] == v) v_znane = 1;
+        }
+        if(u_znane == 0 &&liczba_el_rama <3){
+            rama[liczba_el_rama] = u;
+            liczba_el_rama++;
+        }
+        if(v_znane ==0 && liczba_el_rama < 3){
+            rama[liczba_el_rama] = v;
+            liczba_el_rama++;
+        }
+    }
+    // rozstawienie nodow na pomocniczy okreg o promieniu 100
+    // cos(kat) = x/promien - wzor dla trojkata prostokatnego sin(kat) = y/promien
+    double promien = 100;
+    for(int i =0; i < liczba_el_rama; i++){
+        double kat = i *(2*PI/liczba_el_rama); // katy kolejno 0, 120, 240
+        int id = rama[i];
+        wierzcholki->nody[id].x = promien * cos(kat);
+        wierzcholki->nody[id].y = promien * sin(kat);
+    }
+    for(int iter = 0; iter < iteracje; iter++){
+        for(int i =0; i <rozmiar_tablicy; i++){
+            nowe_x[i] = 0.0;
+            nowe_y[i] = 0.0;
+            stopien[i] = 0;
+        }
+        for(int k =0; k < krawedzie->liczbaKrawedzi; k++){
+            int u = krawedzie->Krawedzie[k].node1;
+            int v = krawedzie->Krawedzie[k].node2;
+            nowe_x[u] += wierzcholki->nody[v].x;
+            nowe_y[u] += wierzcholki->nody[v].y;
+            stopien[u]++;
+            nowe_x[v] += wierzcholki->nody[u].x;
+            nowe_y[v] += wierzcholki->nody[u].y;
+            stopien[v]++;
+        }
+        for(int i =0; i < rozmiar_tablicy; i++){
+            if(stopien[i] > 0){    //sprawdzam czy wierzcholek istnieje
+                int jest_rama =0;
+                for(int j =0; j <liczba_el_rama; j++){
+                    if(rama[j] ==i) jest_rama = 1;
+                }
+                if(jest_rama ==0){
+                wierzcholki->nody[i].x = nowe_x[i] / stopien[i];
+                wierzcholki->nody[i].y = nowe_y[i] / stopien[i];
+                }
+        }
+     }
+    }
+    free(nowe_x);
+    free(nowe_y);
+    free(stopien);
+}
+
 
