@@ -6,9 +6,7 @@
 #include "danePob.h"
 #include "struct.h"
 
-int inicjuj_grafy(graf_Edg_All s){
-    
-}
+
 
 int PrintElements(graf_Edg_All *structZKra){
     for(int i =0; i < structZKra->liczbaKrawedzi; i++){
@@ -30,9 +28,10 @@ int pobieranieDanych(char * nazwaPliku, graf_Edg_All *krawedzieGrafu ){
     int node1,node2; // dodanie zmiennych pomocniczych 
     double waga;
     char nazwa[50];
+    krawedzieGrafu->Krawedzie = malloc(sizeof(Edge) * nrOfEle);
+    if (!krawedzieGrafu->Krawedzie) return 0;
 
     while (fscanf(fptr,"%s %d %d %lf", nazwa, &node1, &node2, &waga) == 4){
-        
         
         
         if(i>=nrOfEle) {
@@ -67,10 +66,3 @@ int pobieranieDanych(char * nazwaPliku, graf_Edg_All *krawedzieGrafu ){
 }    
 
 
-int freeKra(graf_Edg_All *structZKra){ // structZKra - struktóra z krawędziami
-    if(structZKra != NULL){
-        free(structZKra->Krawedzie);
-        free(structZKra);
-    }
-    return 1;
-}
