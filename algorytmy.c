@@ -25,26 +25,49 @@ void uklad_fre (graf_Edg_All *krawedzie, graf_Nod_All *wierzcholki, int iteracje
                         double odlY  = wierzcholki->nody[i].y - wierzcholki->nody[j].y;
                         double odlXY = sqrt(pow(odlX,2) + pow(odlY,2));
                         if(odlXY < 0.001 ) continue;                // jeśli pkt się naktryają to pomijamy dzielenie przez 0 to nezdefinowany
-                        double fOdpychania =  wierzcholki->nody[i].listaPol[j] *(20/pow(odlXY,2)); // 1 można zmienić jak jest za mało bo może być trochę za ciasno
+                        double fOdpychania =  20/pow(odlXY,2); // 1 można zmienić jak jest za mało bo może być trochę za ciasno
                         double trojkatPodobny = fOdpychania/odlXY; // Trójkąt siły i odległości to tr. podobne w związku z tym odległośći też są proporcjonalne
                         Fx += trojkatPodobny*odlX; // dodajmy wektor przemieszczenia na (-) jeśłi jest za j-tym węzłem na + jeśli przed
                         Fy += trojkatPodobny*odlY;
                         
-                        if(wierzcholki->nody[i].listaPol[j] != 0){
-                            if(odlXY < 0.001 ) continue;   
-                                        
-                            double fPrzyciagania = wierzcholki->nody[i].listaPol[j] * (-0.4*odlXY); // 1 można zmienić jak jest za mało bo może być trochę za ciasno
-                            double trojkatPodobnyPrzy = fPrzyciagania/odlXY; // Trójkąt siły i odległości to tr. podobne w związku z tym odległośći też są proporcjonalne
-                            Fx += trojkatPodobnyPrzy*odlX; // dodajmy wektor przemieszczenia na (-) jeśłi jest za j-tym węzłem na + jeśli przed
-                            Fy += trojkatPodobnyPrzy*odlY;
-                        }
+                        
                     }
                 
             }
-            for(int j=1; j<wierzcholki->liczbaWierzcholkow; j++){
-                
+
+            for(int j=0; j<krawedzie->liczbaKrawedzi; j++){
+                if(krawedzie->Krawedzie[j].node1 == wierzcholki->nody[i].node1 || krawedzie->Krawedzie[j].node2 == wierzcholki->nody[i].node1 ){
+
+                        
+                    if(krawedzie->Krawedzie[j].node1 ==  wierzcholki->nody[i].node1){ // szukamy połączeń między krawędziami  jeśli jest połączony z node 2  
+                        
+                        node szukanyNode = wierzcholki->nody[krawedzie->Krawedzie[j].node2];
+                        double odlX  = wierzcholki->nody[i].x - szukanyNode.x; // odl - odległość x w osi ox y w osi oy
+                        double odlY  = wierzcholki->nody[i].y -szukanyNode.y;
+                        double odlXY = sqrt(pow(odlX,2) + pow(odlY,2));
+                        if(odlXY < 0.001 ) continue; 
+
+                        double fPrzyciagania = krawedzie->Krawedzie[j].waga * (-0.4*odlXY); // 1 można zmienić jak jest za mało bo może być trochę za ciasno
+                        double trojkatPodobnyPrzy = fPrzyciagania/odlXY; // Trójkąt siły i odległości to tr. podobne w związku z tym odległośći też są proporcjonalne
+                        Fx += trojkatPodobnyPrzy*odlX; // dodajmy wektor przemieszczenia na (-) jeśłi jest za j-tym węzłem na + jeśli przed
+                        Fy += trojkatPodobnyPrzy*odlY;
+                    }
+                    if(krawedzie->Krawedzie[j].node2 ==  wierzcholki->nody[i].node1){ // szukamy połączeń między krawędziami  jeśli jest połączony z node 2  
+                            
+                        node szukanyNode = wierzcholki->nody[krawedzie->Krawedzie[j].node1];
+                        double odlX  = wierzcholki->nody[i].x - szukanyNode.x; // odl - odległość x w osi ox y w osi oy
+                        double odlY  = wierzcholki->nody[i].y -szukanyNode.y;
+                        double odlXY = sqrt(pow(odlX,2) + pow(odlY,2));
+                        if(odlXY < 0.001 ) continue; 
+
+                        double fPrzyciagania = krawedzie->Krawedzie[j].waga * (-0.4*odlXY); // 1 można zmienić jak jest za mało bo może być trochę za ciasno
+                        double trojkatPodobnyPrzy = fPrzyciagania/odlXY; // Trójkąt siły i odległości to tr. podobne w związku z tym odległośći też są proporcjonalne
+                        Fx += trojkatPodobnyPrzy*odlX; // dodajmy wektor przemieszczenia na (-) jeśłi jest za j-tym węzłem na + jeśli przed
+                        Fy += trojkatPodobnyPrzy*odlY;
+                        
+                    }
+                }
             }
-            // tutaj sprężyny tylko dobrze dodć jakiąś listę z czym jest połączony bo inaczej to jest kolejny for
 
 
             wierzcholki->nody[i].x += Fx; // zmiana pozycji wd wektora FX oraz Fy

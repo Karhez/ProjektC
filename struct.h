@@ -7,7 +7,7 @@ typedef struct {
     int node1; // number wierzchołka
     double x; // współrzędna x
     double y; // współrzędna y
-    double *listaPol;
+   
 } node;
 
 typedef struct {
