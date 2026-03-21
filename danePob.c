@@ -42,7 +42,7 @@ int pobieranieDanych(char * nazwaPliku, graf_Edg_All *krawedzieGrafu ){
             if(!tmp){
 
                 printf("brak pamięci !!! błąd w pliku danePob linia 22");
-                free (krawedzieGrafu);
+                free (krawedzieGrafu->Krawedzie);
                 fclose(fptr);
                 return 0;
             }
