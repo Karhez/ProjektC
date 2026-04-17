@@ -20,7 +20,7 @@ void pomoc(){
     printf(" -i  <plik wejsciowy> \n");
     printf(" -o <plik wyjsciowy> \n");
     // skroty literowe fre - fruchterman_reingold tut - tutte, Spe - Spectral layout 
-    printf(" -a <algorytm>: 'fre' lub 'tut' lub 'Spe'\n");
+    printf(" -a <algorytm>: 'fre' lub 'tut' lub 'spe'\n");
     printf(" -b (zapis binarny do pliku, domyslnie tekstowy)\n");
 }
 
