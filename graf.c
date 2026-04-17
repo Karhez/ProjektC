@@ -117,20 +117,23 @@ int zapisz_tekstowo(const graf_Nod_All *wierzcholki, const char *nazwa_pliku){
     return 1;
 }
 int zapisz_binarnie(const graf_Nod_All *wierzcholki, const char *nazwa_pliku){
-    FILE *file = fopen( nazwa_pliku, "wb");
+    FILE *file = fopen(nazwa_pliku, "wb");
     if(!file) return 0;
 
-    for(int i = 1; i< wierzcholki->liczbaWierzcholkow; i++ ){
+    // Write record count first so Java knows how many to read
+    int count = wierzcholki->liczbaWierzcholkow - 1;
+    fwrite(&count, sizeof(int), 1, file);
+
+    for(int i = 1; i < wierzcholki->liczbaWierzcholkow; i++){
         node *Wie = &(wierzcholki->nody[i]);
-        if(Wie->node1 != 0 || Wie->node1 < 0){
-            fwrite(&(Wie->node1),sizeof(int),1,file);
-            fwrite(&(Wie->x),sizeof(double),1,file);
-            fwrite(&(Wie->y),sizeof(double),1,file);
+        if(Wie->node1 > 0){
+            fwrite(&(Wie->node1), sizeof(int), 1, file);
+            fwrite(&(Wie->x),     sizeof(double), 1, file);
+            fwrite(&(Wie->y),     sizeof(double), 1, file);
         }
     }
     fclose(file);
     return 1;
-
 }
 // poprawa zwolnij grafy
 void zwolnij_grafy(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie){
