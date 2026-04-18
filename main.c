@@ -36,8 +36,7 @@ int main(int argc, char *argv[]){
         pomoc();
         return EXIT_FAILURE;
     }
-    printf("%d\n", argc);
-
+    
     for(int i =1; i< argc; i++){
         if(strcmp(argv[i], "-i") ==0 && i+1 < argc){
             file_in = argv[++i];
@@ -45,12 +44,11 @@ int main(int argc, char *argv[]){
             file_out = argv[++i];
         }else if(strcmp(argv[i], "-a" ) ==0 && i+1 < argc){
             algo = argv[++i];
-            printf("%s\n", algo);
         }else if(strcmp(argv[i], "-b") ==0){
             binarny = true;
         }
     }
-    printf("wczytało dane z odczytu\n");
+    printf("-----POPRAWNIE wczytano dane z odczytu-----\n");
     if(!file_in || !file_out || !algo){
         pomoc();
         return EXIT_FAILURE;
@@ -66,9 +64,9 @@ int main(int argc, char *argv[]){
         fprintf(stderr, "Blad: Nie mozna wczytac pliku %s\n", file_in);
         return EXIT_FAILURE;
     }
-    printf("wczytało dane z pliku\n");
+    printf("-----Poprawnie wczytano dane z pliku-----\n");
     buduj_wierzcholki_z_krawedzi(&wierzcholki, &krawedzie);
-    printf("zbudowało wirzchołki\n");
+    printf("-----Poprawnie zbudowano wierzcholki-----\n");
     inicjuj_wierzcholki(&wierzcholki);
     // Uruchamianie algorytmu
     if(strcmp(algo, "fre")  == 0){
@@ -82,7 +80,7 @@ int main(int argc, char *argv[]){
         zwolnij_grafy(&wierzcholki, &krawedzie);
         return EXIT_FAILURE;
     }
-    printf("zrobiło algorytm\n");
+    printf("-----Poprawnie zastosowano algorytm-----\n");
 
     bool sukces;
     //zapis_tekstowo oraz zapisz bomarmoe to funkcje typu bool
@@ -90,11 +88,11 @@ int main(int argc, char *argv[]){
     if(binarny){
         sukces = zapisz_binarnie(&wierzcholki, file_out);
     }else{
-        printf("zapisano\n");
+        printf("-----SUKCES! zapisano dane do pliku-----\n");
         sukces = zapisz_tekstowo(&wierzcholki, file_out);
     }
     if(sukces){
-        printf("Poprawnie wyznaczono wspolrzedne i zapisano do pliku %s\n", file_out);
+        printf("-----SUKCES! Poprawnie wyznaczono wspolrzedne i zapisano do pliku %s-----\n", file_out);
     }
     zwolnij_grafy(&wierzcholki, &krawedzie);
     return 0;

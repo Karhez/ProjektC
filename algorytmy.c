@@ -20,7 +20,9 @@ void uklad_fre (graf_Edg_All *krawedzie, graf_Nod_All *wierzcholki, int iteracje
             
             for(int j = 1; j<wierzcholki->liczbaWierzcholkow+1; j++){ // zaczynamy od 1 bo tak zaczynają się wierzchołki i to jest wektor odpychania tutaj tylko między cząstkami
 
-                    if(i !=j ||  wierzcholki->nody[j].node1 == 0){ // jeśli nazwa node jest ta sama to pomijamy bo będzie 1/0
+                    if(i !=j || wierzcholki->nody[j].node1 == 0){
+                        continue;}
+                      // jeśli nazwa node jest ta sama to pomijamy bo będzie 1/0; 2warunek-> jezeli uzylem calloca i wierzcholek jest nie ruszony to pod tym indeksem znajduje sie 0 więc to pomijam
                         double odlX  = wierzcholki->nody[i].x - wierzcholki->nody[j].x; // odl - odległość x w osi ox y w osi oy
                         double odlY  = wierzcholki->nody[i].y - wierzcholki->nody[j].y;
                         double odlXY = sqrt(pow(odlX,2) + pow(odlY,2));
@@ -29,9 +31,9 @@ void uklad_fre (graf_Edg_All *krawedzie, graf_Nod_All *wierzcholki, int iteracje
                         double trojkatPodobny = fOdpychania/odlXY; // Trójkąt siły i odległości to tr. podobne w związku z tym odległośći też są proporcjonalne
                         Fx += trojkatPodobny*odlX; // dodajmy wektor przemieszczenia na (-) jeśłi jest za j-tym węzłem na + jeśli przed
                         Fy += trojkatPodobny*odlY;
+                    
                         
-                        
-                    }
+                    
                 
             }
 
@@ -87,7 +89,7 @@ void uklad_tut(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie, int iteracje)
     }
     int rozmiar_tablicy = max_id + 1; // ideksxujemy od 0 wiec gdy max_id = 100 to jest 99 node
     // tablice pomocnicze - wspolrzedne
-    double * nowe_x = calloc(rozmiar_tablicy, sizeof(double));
+    double * nowe_x = calloc(rozmiar_tablicy, sizeof(double)); // bufory dla srednik przechowuja srednie obliczone dla nowyych wierzcholkow
     double * nowe_y = calloc(rozmiar_tablicy, sizeof(double));
     int *stopien = calloc(rozmiar_tablicy, sizeof(int)); // informacja ile sasiadow ma dany wierzcholek
 

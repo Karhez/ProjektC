@@ -83,7 +83,8 @@
         }
     }
     wierzcholki->liczbaWierzcholkow = najNrWie;
-    printf("UWAGA dodcano %d unikalnych wierzcholkow\n", liczba_Dodanych);
+    printf("-----UWAGA dodno %d unikalnych wierzcholkow-----\n", liczba_Dodanych);
+    printf("\n");
  }
 
 void inicjuj_wierzcholki(graf_Nod_All *wierzcholki){
@@ -104,7 +105,8 @@ void inicjuj_wierzcholki(graf_Nod_All *wierzcholki){
 int zapisz_tekstowo(const graf_Nod_All *wierzcholki, const char *nazwa_pliku){
     FILE *file = fopen( nazwa_pliku, "w");
     if(!file) return 0;
-    printf("otwarto plik\n");
+    printf("-----SUKCES! Prawidlowo otworzono plik-----\n");
+    printf("\n");
     for(int i = 1; i< wierzcholki->liczbaWierzcholkow+1; i++ ){
         node *Wie = &(wierzcholki->nody[i]);
 
@@ -143,6 +145,6 @@ void zwolnij_grafy(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie){
    if(krawedzie->Krawedzie !=NULL){
     free(krawedzie->Krawedzie);
    }
-    printf("------Pomyślnie zwolniono pamięć------");
+    printf("------Pomyślnie zwolniono pamięć------\n");
 
 }
