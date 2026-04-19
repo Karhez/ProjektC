@@ -20,7 +20,7 @@ void uklad_fre (graf_Edg_All *krawedzie, graf_Nod_All *wierzcholki, int iteracje
             
             for(int j = 1; j<wierzcholki->liczbaWierzcholkow+1; j++){ // zaczynamy od 1 bo tak zaczynają się wierzchołki i to jest wektor odpychania tutaj tylko między cząstkami
 
-                    if(i !=j || wierzcholki->nody[j].node1 == 0){
+                    if(i ==j || wierzcholki->nody[j].node1 == 0){
                         continue;}
                       // jeśli nazwa node jest ta sama to pomijamy bo będzie 1/0; 2warunek-> jezeli uzylem calloca i wierzcholek jest nie ruszony to pod tym indeksem znajduje sie 0 więc to pomijam
                         double odlX  = wierzcholki->nody[i].x - wierzcholki->nody[j].x; // odl - odległość x w osi ox y w osi oy
