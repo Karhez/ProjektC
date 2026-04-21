@@ -122,7 +122,7 @@ int zapisz_binarnie(const graf_Nod_All *wierzcholki, const char *nazwa_pliku){
     FILE *file = fopen(nazwa_pliku, "wb");
     if(!file) return 0;
 
-    // Write record count first so Java knows how many to read
+    
     int count = wierzcholki->liczbaWierzcholkow - 1;
     fwrite(&count, sizeof(int), 1, file);
 
