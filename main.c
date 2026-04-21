@@ -25,6 +25,7 @@ void pomoc(){
 }
 
 int main(int argc, char *argv[]){
+
     pomoc();
     char *file_in = NULL;
     char *file_out = NULL;
@@ -69,6 +70,8 @@ int main(int argc, char *argv[]){
     printf("-----Poprawnie zbudowano wierzcholki-----\n");
     inicjuj_wierzcholki(&wierzcholki);
     // Uruchamianie algorytmu
+    time_t start, end; 
+    time(&start);
     if(strcmp(algo, "fre")  == 0){
         uklad_fre(&krawedzie, &wierzcholki,  DOMYSLNE_ITERACJE);
     }else if(strcmp(algo, "tut")==0){
@@ -80,6 +83,9 @@ int main(int argc, char *argv[]){
         zwolnij_grafy(&wierzcholki, &krawedzie);
         return EXIT_FAILURE;
     }
+    time(&end);
+    double timeTaken  = (double)(end - start);
+    
     printf("-----Poprawnie zastosowano algorytm-----\n");
 
     bool sukces;
@@ -94,6 +100,7 @@ int main(int argc, char *argv[]){
     if(sukces){
         printf("-----SUKCES! Poprawnie wyznaczono wspolrzedne i zapisano do pliku %s-----\n", file_out);
     }
+    printf("\nCzas wywoływania programu dla algorytmu: %s to %lf\n", algo, timeTaken );
     zwolnij_grafy(&wierzcholki, &krawedzie);
     return 0;
 }

@@ -25,9 +25,10 @@ void uklad_fre (graf_Edg_All *krawedzie, graf_Nod_All *wierzcholki, int iteracje
                       // jeśli nazwa node jest ta sama to pomijamy bo będzie 1/0; 2warunek-> jezeli uzylem calloca i wierzcholek jest nie ruszony to pod tym indeksem znajduje sie 0 więc to pomijam
                         double odlX  = wierzcholki->nody[i].x - wierzcholki->nody[j].x; // odl - odległość x w osi ox y w osi oy
                         double odlY  = wierzcholki->nody[i].y - wierzcholki->nody[j].y;
-                        double odlXY = sqrt(pow(odlX,2) + pow(odlY,2));
+                        double odlXY = sqrt(odlX*odlX + odlY*odlY);
+                        double odlXY2 = odlX*odlX + odlY*odlY;
                         if(odlXY < 0.001 ) continue;                // jeśli pkt się naktryają to pomijamy dzielenie przez 0 to nezdefinowany
-                        double fOdpychania =  20/pow(odlXY,2); // 1 można zmienić jak jest za mało bo może być trochę za ciasno
+                        double fOdpychania =  20/odlXY2; // 1 można zmienić jak jest za mało bo może być trochę za ciasno
                         double trojkatPodobny = fOdpychania/odlXY; // Trójkąt siły i odległości to tr. podobne w związku z tym odległośći też są proporcjonalne
                         Fx += trojkatPodobny*odlX; // dodajmy wektor przemieszczenia na (-) jeśłi jest za j-tym węzłem na + jeśli przed
                         Fy += trojkatPodobny*odlY;
@@ -46,7 +47,8 @@ void uklad_fre (graf_Edg_All *krawedzie, graf_Nod_All *wierzcholki, int iteracje
                         node szukanyNode = wierzcholki->nody[krawedzie->Krawedzie[j].node2];
                         double odlX  = wierzcholki->nody[i].x - szukanyNode.x; // odl - odległość x w osi ox y w osi oy
                         double odlY  = wierzcholki->nody[i].y -szukanyNode.y;
-                        double odlXY = sqrt(pow(odlX,2) + pow(odlY,2));
+                        double odlXY = sqrt(odlX*odlX + odlY*odlY);
+                        
                         if(odlXY < 0.001 ) continue; 
 
                         double fPrzyciagania = krawedzie->Krawedzie[j].waga * (-0.4*odlXY); // 1 można zmienić jak jest za mało bo może być trochę za ciasno
@@ -59,7 +61,7 @@ void uklad_fre (graf_Edg_All *krawedzie, graf_Nod_All *wierzcholki, int iteracje
                         node szukanyNode = wierzcholki->nody[krawedzie->Krawedzie[j].node1];
                         double odlX  = wierzcholki->nody[i].x - szukanyNode.x; // odl - odległość x w osi ox y w osi oy
                         double odlY  = wierzcholki->nody[i].y -szukanyNode.y;
-                        double odlXY = sqrt(pow(odlX,2) + pow(odlY,2));
+                         double odlXY = sqrt(odlX*odlX + odlY*odlY);
                         if(odlXY < 0.001 ) continue; 
 
                         double fPrzyciagania = krawedzie->Krawedzie[j].waga * (-0.4*odlXY); // 1 można zmienić jak jest za mało bo może być trochę za ciasno
@@ -168,26 +170,26 @@ void uklad_spe(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie, int iteracje)
     int n = max_id + 1; // rozmiar macierzy (indeksujemy od 0)
 
     //  alokacja macierzy Laplace'a L jako tablicy plaskiej n x n 
-    double *L = calloc(n * n, sizeof(double));
+    double *L = calloc(n * n, sizeof(double)); // zapisanie tablicy 2d plaskiej zamiast 2d to jest 1d tylko 2 n razy większa
     if (!L) return;
-
+    // L to miacierz laplace czyli maicerz sąsiedctwa 
     //  budowa macierzy sasiedztwa A i diagonalnej D -> L = D - A 
     for (int k = 0; k < krawedzie->liczbaKrawedzi; k++) {
         int u = krawedzie->Krawedzie[k].node1;
         int v = krawedzie->Krawedzie[k].node2;
         double w = krawedzie->Krawedzie[k].waga;
 
-        L[u * n + v] -= w; // -A
-        L[v * n + u] -= w; // -A (graf nieskierowany)
-        L[u * n + u] += w; // +D
-        L[v * n + v] += w; // +D
-    }
+        L[u * n + v] -= w; // -A // element  macierz sąsiedctwa 
+        L[v * n + u] -= w; // -A (graf nieskierowany)macierz sąsiedctwa 
+        L[u * n + u] += w; // +D // krawędzie macierz stopni 
+        L[v * n + v] += w; // +D macierz stopni
+    } // na podstawie A i D stopnie węzłów przękątnej a A to połączenia gałęzi (macierz sąsiedctwa )
 
     //  szukamy lambda_max aby zbudowac macierz przesuniecia M = lambda_max*I - L 
     // przyblizamy lambda_max jako max element na przekatnej D (wystarczajace przyblizenie)
     double lambda_max = 0.0;
     for (int i = 0; i < n; i++) {
-        if (L[i * n + i] > lambda_max) lambda_max = L[i * n + i];
+        if (L[i * n + i] > lambda_max) lambda_max = L[i * n + i]; // liczymy lambda po to by potem wyliczy wketor przesunięcia 
     }
     lambda_max += 1.0; // male przesuniecie gwarantujace dodatniosc
 
@@ -195,7 +197,7 @@ void uklad_spe(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie, int iteracje)
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             if (i == j) {
-                L[i * n + j] = lambda_max - L[i * n + j];
+                L[i * n + j] = lambda_max - L[i * n + j]; // odwracamy macierz tak że największe to najmniejsze i vice versa
             } else {
                 L[i * n + j] = -L[i * n + j];
             }
@@ -209,7 +211,7 @@ void uklad_spe(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie, int iteracje)
     double *v0   = malloc(n * sizeof(double)); // wektor wlasny nr 0 (stalego - odpowiadajacy lambda=0 L)
     double *v1   = malloc(n * sizeof(double)); // wektor wlasny nr 1 (2. najmniejsza)
     double *v2   = malloc(n * sizeof(double)); // wektor wlasny nr 2 (3. najmniejsza)
-    if (!vec || !tmp || !v0 || !v1 || !v2) {
+    if (!vec || !tmp || !v0 || !v1 || !v2) {// jeśli jakiś element jest zerowy albo null to kończymy bo jest coś nie tak 
         free(L); free(vec); free(tmp); free(v0); free(v1); free(v2);
         return;
     }
@@ -219,27 +221,27 @@ void uklad_spe(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie, int iteracje)
 
     //  wektor wlasny v0 odpowiadajacy lambda_max M 
     // (to jest wektor stalej [1,1,...,1]/sqrt(n) odpowiadajacy lambda=0 L)
-    for (int i = 0; i < n; i++) vec[i] = 1.0;
+    for (int i = 0; i < n; i++) vec[i] = 1.0; // ustawiamy wketor na 1 
     for (int iter = 0; iter < iteracje; iter++) {
         // tmp = M * vec
         for (int i = 0; i < n; i++) {
-            tmp[i] = 0.0;
-            for (int j = 0; j < n; j++) tmp[i] += L[i * n + j] * vec[j];
+            tmp[i] = 0.0; // zerujemy by 
+            for (int j = 0; j < n; j++) tmp[i] += L[i * n + j] * vec[j]; // mnożymy wektor razy macierz laplace 
         }
         // normalizacja
         double norm = 0.0;
-        for (int i = 0; i < n; i++) norm += tmp[i] * tmp[i];
-        norm = sqrt(norm);
-        if (norm < 1e-12) break;
-        for (int i = 0; i < n; i++) vec[i] = tmp[i] / norm;
+        for (int i = 0; i < n; i++) norm += tmp[i] * tmp[i]; // normalizacja czyli jeśli coś jest ujemne to zostaje dodatnie 
+        norm = sqrt(norm); // jako, że v0 to maicerz 1 pomnożona przez 1/sqrt(n) 
+        if (norm < 1e-12) break; // jeśli norm jest mniejsze od jakiegoś tam zakresu to kończymy bo będzie problem z dzieleiniem na zero 
+        for (int i = 0; i < n; i++) vec[i] = tmp[i] / norm; // obliczmy wektor czyli temp / norm 
     }
-    for (int i = 0; i < n; i++) v0[i] = vec[i];
+    for (int i = 0; i < n; i++) v0[i] = vec[i]; // wketor v0 to wektor smiecoiwy nic nie warty
 
     //  wektor wlasny v1 (2. co do wielkosci M = 2. najmniejsza L) 
     // losowa inicjalizacja + deflacja wzgledem v0
     srand(42);
-    for (int i = 0; i < n; i++) vec[i] = (double)(rand() % 100 + 1);
-    for (int iter = 0; iter < iteracje; iter++) {
+    for (int i = 0; i < n; i++) vec[i] = (double)(rand() % 100 + 1); // jakeieś locowe wsp dla vec 
+    for (int iter = 0; iter < iteracje; iter++) { // główna pętla jeśli już obliczyliśmy laplace i etc  to można dalej iść
         // deflacja: odejmujemy skladowa wzgledem v0
         double dot = 0.0;
         for (int i = 0; i < n; i++) dot += vec[i] * v0[i];
@@ -256,7 +258,7 @@ void uklad_spe(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie, int iteracje)
         if (norm < 1e-12) break;
         for (int i = 0; i < n; i++) vec[i] = tmp[i] / norm;
     }
-    for (int i = 0; i < n; i++) v1[i] = vec[i];
+    for (int i = 0; i < n; i++) v1[i] = vec[i]; // wektor v1 to werktor dla wsp X
 
     //  wektor wlasny v2 (3. co do wielkosci M = 3. najmniejsza L) 
     // deflacja wzgledem v0 i v1
@@ -283,12 +285,12 @@ void uklad_spe(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie, int iteracje)
         if (norm < 1e-12) break;
         for (int i = 0; i < n; i++) vec[i] = tmp[i] / norm;
     }
-    for (int i = 0; i < n; i++) v2[i] = vec[i];
+    for (int i = 0; i < n; i++) v2[i] = vec[i]; // to jest wektor v2 dla wsp Y
 
     //  przypisanie wspolrzednych xi = v1[i], yi = v2[i] 
     // v1 odpowiada 2. najmniejszej wartosci wlasnej L (wspolrzedna X)
     // v2 odpowiada 3. najmniejszej wartosci wlasnej L (wspolrzedna Y)
-    for (int i = 0; i < krawedzie->liczbaKrawedzi; i++) {
+    for (int i = 0; i < krawedzie->liczbaKrawedzi; i++) { // teraz jak mamy wektory v2 i v1 to możemy oblizyć wsp X i Y 
         int u = krawedzie->Krawedzie[i].node1;
         int v_id = krawedzie->Krawedzie[i].node2;
         wierzcholki->nody[u].x = v1[u];
@@ -298,11 +300,11 @@ void uklad_spe(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie, int iteracje)
     }
 
     //   5: normalizacja do obszaru SZEROKOSC_POLA x WYSOKOSC_POLA 
-    // (interpolacja liniowa jak opisano w PDF)
+
     double x_min = v1[0], x_max = v1[0];
     double y_min = v2[0], y_max = v2[0];
     for (int i = 1; i < n; i++) {
-        if (v1[i] < x_min) x_min = v1[i];
+        if (v1[i] < x_min) x_min = v1[i]; // czy wsp się mieści w wymiarach ramki
         if (v1[i] > x_max) x_max = v1[i];
         if (v2[i] < y_min) y_min = v2[i];
         if (v2[i] > y_max) y_max = v2[i];
@@ -316,8 +318,8 @@ void uklad_spe(graf_Nod_All *wierzcholki, graf_Edg_All *krawedzie, int iteracje)
         int u   = krawedzie->Krawedzie[i].node1;
         int v_id = krawedzie->Krawedzie[i].node2;
         // interpolacja liniowa: mapowanie na [-W/2, W/2] x [-H/2, H/2]
-        wierzcholki->nody[u].x   = ((v1[u]    - x_min) / x_range - 0.5) * SZEROKOSC_POLA;
-        wierzcholki->nody[u].y   = ((v2[u]    - y_min) / y_range - 0.5) * WYSOKOSC_POLA;
+        wierzcholki->nody[u].x   = ((v1[u]     - x_min) / x_range - 0.5) * SZEROKOSC_POLA; // tutaj wyznaczamy wsp x i na podstawie wketora v1 czyli dla i x min i x range ustawiamy wsp na podstawie ramki gdzie pkt ma być 
+        wierzcholki->nody[u].y   = ((v2[u]     - y_min) / y_range - 0.5) * WYSOKOSC_POLA;
         wierzcholki->nody[v_id].x = ((v1[v_id] - x_min) / x_range - 0.5) * SZEROKOSC_POLA;
         wierzcholki->nody[v_id].y = ((v2[v_id] - y_min) / y_range - 0.5) * WYSOKOSC_POLA;
     }
